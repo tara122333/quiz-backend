@@ -5,6 +5,10 @@ const QuestionSchema = new mongoose.Schema({
         type : String,
         required : true
     },
+    quiz : {
+        type : mongoose.Types.ObjectId,
+        ref : "quiz",
+    },
     option1: {
         type : String,
         required : true
@@ -46,3 +50,5 @@ const QuestionSchema = new mongoose.Schema({
     },
 },
 {timestamps : true});
+
+export const QuestionModel = mongoose.model("question",QuestionSchema);

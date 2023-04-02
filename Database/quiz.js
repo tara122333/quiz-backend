@@ -17,12 +17,6 @@ const QuizSchema = new mongoose.Schema({
         type : Number,
         required : true,
     },
-    question: [
-        {
-            type : mongoose.Types.ObjectId,
-            ref : "Question"
-        }
-    ],
 }, {
     timestamps : true
 });
