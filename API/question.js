@@ -4,6 +4,27 @@ import { QuestionModel } from '../Database/question';
 
 const Router = express.Router();
 
+/*
+route      ==> /all
+method     ==> POST
+Des        ==> find all quiz
+params     ==> none
+Access     ==> public
+*/
+
+Router.get("/all", async(req,res)=>{
+    try {
+        const quizData = await QuizModel.find();
+        if(!quizData || quizData.length ===0){
+            return res.status(201).json({message : "Quiz not found"});
+        }
+        // console.log(quizData);
+        return res.status(200).json({quizData});
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+        
+    }
+});
 
 /*
 route      ==> /create
@@ -15,9 +36,9 @@ Access     ==> public
 
 Router.post("/create", async(req,res)=>{
     try {
-        const {quiz} = req.body;
-        const quizData = await QuizModel.create(quiz);
-        return res.status(200).json({quizData});
+        const {quizData} = req.body;
+        const quizAllData = await QuizModel.create(quizData);
+        return res.status(200).json({quizAllData});
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
@@ -56,7 +77,7 @@ params     ==> _id
 Access     ==> public
 */
 
-Router.post("/question/:_id", async(req,res)=>{
+Router.post("/createquestion/:_id", async(req,res)=>{
     try {
         const {question} = req.body;
         const {_id} = req.params;
@@ -70,6 +91,7 @@ Router.post("/question/:_id", async(req,res)=>{
                 quiz : _id,
                 question : question
             }
+            console.log(newQuestionSchema);
             const questionData = await QuestionModel.create(newQuestionSchema);
             return res.status(200).json({questionData});
         }
@@ -80,6 +102,70 @@ Router.post("/question/:_id", async(req,res)=>{
         }, {new : true});
         return res.status(200).json({questionData});
         
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+});
+
+
+/*
+route      ==> /question
+method     ==> POST
+Des        ==> find question by using _id
+params     ==> _id
+Access     ==> public
+*/
+Router.get("/question/:_id",async(req,res)=>{
+    try {
+        const {_id} = req.params;
+        const findQuestion = await QuestionModel.findOne({'question._id' : _id});
+        if(!findQuestion || findQuestion.length === 0){
+            return res.status(201).json({message : "quiz not found"});
+        }
+        const result = findQuestion.question.filter(function(item){return item._id == _id});
+        // console.log(result);
+        return res.status(200).json({result});
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+        
+    }
+
+});
+
+
+/*
+route      ==> /quiz/question
+method     ==> get
+Des        ==> get quiz by using _id
+params     ==> _id
+Access     ==> public
+*/
+Router.get("/quiz/question/:_id", async(req,res)=>{
+    try {
+        const {_id} = req.params;
+        const quizQuestionData = await QuestionModel.findOne({quiz : _id});
+        // console.log(quizQuestionData);
+        return res.status(200).json({quizQuestionData});
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+});
+
+
+/*
+route      ==> /question
+method     ==> delete
+Des        ==> delete quiz by using _id
+params     ==> _id
+Access     ==> public
+*/
+Router.delete("/delete/quiz/:_id", async(req,res)=>{
+    try {
+        const {_id} = req.params;
+        await QuizModel.findByIdAndDelete(_id);
+        await QuestionModel.findOneAndDelete({quiz : _id});
+        return res.status(200).json({message : "Quiz deleted successfully"});
+
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
