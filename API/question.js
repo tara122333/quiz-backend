@@ -206,4 +206,34 @@ Router.delete("/delete/quiz/question/:_id", async(req,res)=>{
 })
 
 
+
+
+/*
+route      ==> /update/quiz/question
+method     ==> update
+Des        ==> update quiz question by using question _id
+params     ==> _id  
+Access     ==> public
+*/
+Router.put("/update/quiz/question/:_id", async(req,res)=>{
+    try {
+        const {_id} = req.params;
+        const {question} = req.body;
+        const UpdatedData = await QuestionModel.findOneAndUpdate(
+            {'question._id' : _id},
+            {
+                $set : {
+                    'question.$' : question
+                },
+            },
+            { new : true }
+            );
+        console.log(UpdatedData);
+        return res.status(200).json({UpdatedData});
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+});
+
+
 export default Router;
