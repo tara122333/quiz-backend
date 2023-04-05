@@ -172,4 +172,38 @@ Router.delete("/delete/quiz/:_id", async(req,res)=>{
 });
 
 
+
+/*
+route      ==> /delete/quiz/question
+method     ==> delete
+Des        ==> delete quiz question by using question _id
+params     ==> _id  
+Access     ==> public
+*/
+Router.delete("/delete/quiz/question/:_id", async(req,res)=>{
+    try {
+        const {_id} = req.params;
+        const newData = await QuestionModel.findOneAndUpdate(
+            {'question._id' : _id},
+            {
+                $pull : {
+                    'question' : {
+                        _id : _id
+                    }
+                }
+            },
+            {
+                new:true
+            }
+
+        )
+
+          return res.status(200).json({newData});
+          
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+})
+
+
 export default Router;

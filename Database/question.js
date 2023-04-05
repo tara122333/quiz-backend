@@ -28,8 +28,8 @@ const QuestionSchema = new mongoose.Schema({
             required: true
         },
         isMultipleAnswer: {
-            type: Boolean,
-            default: false
+            type: String,
+            required : true,
         },
         answer: {
             type: String,
