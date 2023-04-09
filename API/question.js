@@ -228,7 +228,6 @@ Router.put("/update/quiz/question/:_id", async(req,res)=>{
             },
             { new : true }
             );
-        console.log(UpdatedData);
         return res.status(200).json({UpdatedData});
     } catch (error) {
         return res.status(500).json({ error: error.message });
