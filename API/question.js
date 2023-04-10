@@ -164,7 +164,7 @@ Router.delete("/delete/quiz/:_id", async(req,res)=>{
         const {_id} = req.params;
         await QuizModel.findByIdAndDelete(_id);
         await QuestionModel.findOneAndDelete({quiz : _id});
-        return res.status(200).json({message : "Quiz deleted successfully"});
+        return res.status(200).json({message : true});
 
     } catch (error) {
         return res.status(500).json({ error: error.message });
