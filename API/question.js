@@ -37,6 +37,7 @@ Access     ==> public
 Router.post("/create", async(req,res)=>{
     try {
         const {quizData} = req.body;
+        // console.log(req.body);
         const quizAllData = await QuizModel.create(quizData);
         return res.status(200).json({quizAllData});
     } catch (error) {
@@ -80,6 +81,7 @@ Access     ==> public
 Router.post("/createquestion/:_id", async(req,res)=>{
     try {
         const {question} = req.body;
+        // console.log(req.body);
         const {_id} = req.params;
         const isValidOrNotID = await QuizModel.findById(_id);
         if(!isValidOrNotID || isValidOrNotID.length === 0){
@@ -198,7 +200,7 @@ Router.delete("/delete/quiz/question/:_id", async(req,res)=>{
 
         )
 
-          return res.status(200).json({newData});
+          return res.status(200).json({message : true});
           
     } catch (error) {
         return res.status(500).json({ error: error.message });
