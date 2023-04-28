@@ -18,7 +18,6 @@ Router.get("/all", async(req,res)=>{
         if(!quizData || quizData.length ===0){
             return res.status(201).json({message : "Quiz not found"});
         }
-        // console.log(quizData);
         return res.status(200).json({quizData});
     } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -37,7 +36,6 @@ Access     ==> public
 Router.post("/create", async(req,res)=>{
     try {
         const {quizData} = req.body;
-        // console.log(req.body);
         const quizAllData = await QuizModel.create(quizData);
         return res.status(200).json({quizAllData});
     } catch (error) {
@@ -81,7 +79,6 @@ Access     ==> public
 Router.post("/createquestion/:_id", async(req,res)=>{
     try {
         const {question} = req.body;
-        // console.log(req.body);
         const {_id} = req.params;
         const isValidOrNotID = await QuizModel.findById(_id);
         if(!isValidOrNotID || isValidOrNotID.length === 0){
@@ -125,7 +122,6 @@ Router.get("/question/:_id",async(req,res)=>{
             return res.status(201).json({message : "quiz not found"});
         }
         const result = findQuestion.question.filter(function(item){return item._id == _id});
-        // console.log(result);
         return res.status(200).json({result});
     } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -146,7 +142,6 @@ Router.get("/quiz/question/:_id", async(req,res)=>{
     try {
         const {_id} = req.params;
         const quizQuestionData = await QuestionModel.findOne({quiz : _id});
-        // console.log(quizQuestionData);
         return res.status(200).json({quizQuestionData});
     } catch (error) {
         return res.status(500).json({ error: error.message });
